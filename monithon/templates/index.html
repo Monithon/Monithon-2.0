@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block style %}
+
+	#content{
+		width: 100%;
+		height: 100%;
+		margin-top:-20px;
+		position: relative;
+	}
+
+	#map{
+		position: absolute;
+		width:100%;
+		height: 100%;
+		top: 0px;
+		left: 0px;
+
+	}
+
+	.closer{clear:both;}
+{% endblock %}
+
+{% block content %}
+	<div id="map"></div>
+{% endblock %}
+
+{% block jscontent %}
+
+M = {};
+M.resize = function(){
+	$('#content').height($(window).height()-$('#navbar').height()-2);
+	$('#map').width($(window).width());
+};
+
+$(function(){
+	$(window).resize(M.resize);
+
+	M.resize();
+	var map = L.map('map').setView([42.715, 15.271], 6);
+	var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+    var imagery = L.esri.basemapLayer("Imagery").addTo(map);
+    L.control.layers({"OSM":osmLayer, "Imagery":imagery},{}).addTo(map);
+    L.control.fullscreen().addTo(map);
+
+
+});
+{% endblock %}

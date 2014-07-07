@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+{% for report in reports %}
+<div class="report" data-report="{{report.id}}">
+	<h3>{{report.name}}</h3>
+
+</div>
+{% endfor %}
+
+
+{% endblock %}

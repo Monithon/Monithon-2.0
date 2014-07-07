@@ -1,0 +1,10 @@
+{% if field.list %}
+<div class="input-group">
+{% endif %}
+  <input type="datetime" name="{{field.id}}" class="form-control">
+  {% if field.list %}
+  <span class="input-group-btn">
+    <button class="btn clone-self" type="button"><i class="fa fa-plus fa-fw"></i></button>
+  </span>
+</div><!-- /input-group -->
+{% endif %}

@@ -1,0 +1,11 @@
+<div class="form-area" data-origin="{{id}}">
+<h2>{{name}}</h2>
+	{% for f in fields %}
+	<div class="form-group">
+		<label>{{ f.label }} {% if f.oblig %}*{% endif %}</label>
+		{% include f.url with field=f %}
+		<div class="entry"></div>
+		<div class="help-block">{{ f.hint }}</div>
+	</div>
+	{% endfor %}
+</div>

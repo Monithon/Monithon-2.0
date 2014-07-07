@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+{% for project in projects %}
+<div class="project" data-report="{{project.id}}">
+<div class="jumbotron">
+<div class="container">
+	<h3><i class="fa fa-fw  fa-institution"></i>{{project.description}}</h3>
+	<div><i class="fa fa-fw fa-code"></i>{{project.cup}}</div>
+	<div><i class="fa fa-fw fa-eur"></i>{{project.paid_amount}}/{{project.total_amount}}</div>
+	<div><i class="fa fa-fw fa-calendar"></i>{{project.date_from}} - {{project.date_to}}</div>
+	<div>{% for sub in project.subjects.all %} <i class="fa fa-fw fa-tag"></i>{{sub.name}} {% endfor%}</div>
+	<div>{% for loc in project.locations.all %} <i class="fa fa-fw fa-globe"></i>{{loc.name}} {% endfor%}</div>
+	</div>
+	</div>
+</div>
+{% endfor %}
+
+
+{% endblock %}

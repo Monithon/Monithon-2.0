@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block style%}
+.jumbotron img{
+	float:left;
+	margin:10px;
+	-webkit-transform: rotate(-6deg);
+}
+
+
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<img src="{{profile.gravatar}}">
+		<h1>{{profile.username}}</h1>
+	</div>
+</div>
+
+<div class="container">
+	
+	<div class="jumbotron"><h2>Badges</h2></div>
+	<div class="row">
+	{% for badge in badges%}
+		
+	{% endfor %}
+	</div>
+
+	<div class="jumbotron"><h2>Profiles</h2></div>
+	<div class="row col-sm-4 col-sm-offset-4">
+	{% for login in socials %}
+	<div class="row">
+		<a class="btn btn-warning col-sm-12" href="/accounts/login/{{login.url}}"><i class="fa fa-fw {{login.icon}}"></i>{{login.name}}</a>
+	</div>
+	{% endfor %}
+	</div>
+	<div class="row">&nbsp;</div>
+
+</div>
+{% endblock %}

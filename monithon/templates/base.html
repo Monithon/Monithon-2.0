@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Monithon</title>
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+	<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css' rel='stylesheet' />
+
+	<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.3/leaflet.fullscreen.css' rel='stylesheet' />
+	<style>
+	{% block style %}
+	{% endblock %}
+	</style>
+</head>
+<body>
+	<nav class="navbar navbar-default" role="navigation" id="navbar">
+	  <div class="container-fluid">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="/">Monithon</a>
+	    </div>
+
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul class="nav navbar-nav">
+	        <li><a href="/blog"><i class="fa fa-fw fa-comment"></i>Blog</a></li>
+	        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-book"></i>Report <i class="fa fa-fw fa-caret-down"></i></a>
+	        	 <ul class="dropdown-menu" role="menu">
+		            <li><a href="/reports"><i class="fa fa-fw fa-bars"></i>Tutti i Report</a></li>
+		            <li><a href="/reports/new"><i class="fa fa-fw fa-plus"></i>Nuovo Report</a></li>
+		          </ul>
+	        </li>
+	        <li class="dropdown"><a href="/projects" ><i class="fa fa-fw fa-bank"></i>Progetti</a></li>
+	        <li class="dropdown"><a href="/teams" ><i class="fa fa-fw fa-users"></i>Gruppi</a></li>
+	      </ul>
+	      <ul class="nav navbar-nav navbar-right">
+	      {% if request.user %}
+	        <li><a href="/accounts/profile"><i class="fa fa-fw fa-user"></i>{{request.user.username}}</a></li>	
+	        <li><a href="/accounts/logout"><i class="fa fa-fw fa-sign-out"></i>Logout</a></li>	      
+	      {% else %}
+	        <li><a href="/accounts/login"><i class="fa fa-fw fa-user"></i>Login</a></li>
+	      {% endif %}
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+	<div id="content">
+	{% block content %}
+	{% endblock %}
+	</div>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+	<script src="https://rawgit.com/Esri/esri-leaflet/master/dist/esri-leaflet.js"></script>
+	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js'></script>
+	<script src="https://rawgit.com/arthur-e/Wicket/blob/master/wicket-leaflet.js"></script>
+	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.3/Leaflet.fullscreen.min.js'></script>
+	<script>
+	{% block jscontent %}
+	{% endblock %}
+
+	</script>
+</body>
+</html>

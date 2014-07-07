@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+	<form id="{{name}}"  role="form" method="POST">
+		<div id="main_form">
+		</div>
+
+		<div class="input-group">
+			<select id="add_form" class="form-control">
+
+			</select>
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="button" id="do_add_form"><i class="fa fa-fw fa-plus"></i></button>
+			</span>
+		</div><!-- /input-group -->
+		<br />
+		<button class="btn btn-primary form-control" id="submits">Invia</button>
+	</form>
+	<br />
+</div>
+{% endblock %}
+
+{% block jscontent%}
+var forms = {{forms|safe}};
+$(function(){
+	
+	$.getJSON("/forms/list", function(data){
+		for (var i in data)
+		$('#add_form').append("<option value='"+data[i]+"'>"+data[i]+"</option>");
+	});
+
+	function get_form(f_name){
+		$.get('/forms/show/'+f_name, function(data){
+			$("#main_form").append($(data));
+		});
+	}
+
+	for (var form in forms){
+		get_form(forms[form]);
+	}
+
+	$("#do_add_form").click(function(){
+		var f_name = $("#add_form").val();
+		get_form(f_name);
+	});
+
+	$(".clone-self").on("click", function(){
+		var to_clone = $(this).parent().parent();
+		var c = to_clone.clone(true);
+		to_clone.parent().find(".entry").after().append(c);
+
+	});
+
+	$("#submits").click(function(e){
+		var ret = [];
+		$('.form-area').each(function(i,e){
+			var origin = $(e).data("origin");
+			var area = {"origin":origin, "data":[]};
+			$(e).find("input").each(function(k,r){
+				if($(r).attr("name")!==undefined &&  $(r).attr("name").indexOf("leaflet")<0)
+					if($(r).attr("type") == "checkbox" || $(r).attr("type") == "radio")
+						if($(r).is(":checked"))
+							area["data"].push({"name":$(r).attr("name"), "value":$(r).val()});
+						else 
+						;
+					else
+						area["data"].push({"name":$(r).attr("name"), "value":$(r).val()});
+			});
+			ret.push(area); 	
+		});
+		console.log(ret);
+		$.ajax({
+			"url":"/reports/push",
+			"method":"POST",
+			"data":{"data":JSON.stringify({"report":ret, "project":1})}
+		});
+		e.preventDefault();
+		return false;
+	});
+});
+{% endblock %}

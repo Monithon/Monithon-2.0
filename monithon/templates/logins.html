@@ -1,0 +1,13 @@
+{%extends "base.html"%}
+
+{% block content %}
+
+<div class="container">
+	{% for login in socials %}
+	<div class="row">
+		<a class="btn btn-warning col-sm-12" href="/accounts/login/{{login.url}}"><i class="fa fa-fw {{login.icon}}"></i>{{login.name}}</a>
+	</div>
+	{% endfor %}
+</div>
+
+{% endblock %}
