@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{%  block style %}
+
+
+.concluded_badge{
+	display:block;
+	float:right;
+	background-color:green;
+	width:60px;
+	height:60px;
+	color:white;
+	font-weight:bold;
+	border-radius:60px;
+	text-align:center;
+	vertical-align:middle;
+	line-height:60px;
+	-webkit-transform:rotate(7deg);
+	
+}
+
+.concluded_badge{
+	display:none;
+}
+
+.concluded .concluded_badge{
+	display:initial;
+}
+
+.map_container{
+	height:100%;
+	min-height:240px;
+}
+{% endblock %}
+
+{% block jscontent %}
+$(function(){
+	$(".map_container").each(function(i,e){
+		var map= L.map($(e).attr("id")).setView([42.715, 15.271], 5);
+		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+	});
+});
+
+{% endblock %}
+
+{% block content %}
+
+
+<div class="project" data-report="{{project.id}}">
+	<div class="jumbotron {%if project.concluded%}concluded{%endif%}">
+		<div class="container ">
+			<div class="col-lg-2 concluded_badge" title="Concluso!">C</div>
+			<div class="row">
+				<h3 class="col-lg-12"><i class="fa fa-fw  fa-institution"></i>{{project.description}}</h3>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-2 map_container" id="map_container_{{project.id}}"></div>
+			<div class="col-sm-8">
+
+				<div class="col-lg-12"><a href="{{project.oc_page}}" target="_blank"><i class="fa fa-fw fa-code"></i>{{project.cup}}</a></div>
+				<div class="col-lg-12"><i class="fa fa-fw fa-eur"></i>{{project.paid_amount}}/{{project.total_amount}}</div>
+				<div class=" col-lg-12"><i class="fa fa-fw fa-calendar"></i>{{project.date_from}} - {{project.date_to}}</div>
+				<div class=" col-lg-12">{% for sub in project.subjects.all %} <i class="fa fa-fw fa-tag"></i>{{sub.name}} {% endfor%}</div>
+				<div class=" col-lg-12">{% for loc in project.locations.all %} <i class="fa fa-fw fa-globe"></i>{{loc.name}} {% endfor%}</div>
+				
+			</div>
+				
+			<img src="{{qr}}" class="col-sm-2" />
+		</div>
+		<div class="row">
+			{%for report in project.reports.all %} 
+			<div class="col-lg-3 well">	
+				<h3>Report</h3>
+				<div class="row"><div class="col-lg-12"><i class="fa fa-fw fa-user"></i>{{report.author}}</div></div>
+				<a href="/reports/{{report.id}}"><i class="fa fa-fw fa-book"></i>Visualizza</a>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="container">
+		<a href="/reports/new?project={{project.id}}" class="row col-lg-12 btn btn-small btn-primary">Crea Report</a>
+	</div>
+</div>
+
+
+{% endblock %}

@@ -40,7 +40,8 @@ INSTALLED_APPS = (
     'customforms',
     'reports',
     'projects',
-    'social.apps.django_app.default'
+    'social.apps.django_app.default',
+    'oauth2_provider',
 
 )
 
@@ -89,8 +90,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-TEMPLATE_DIRS = (
-        os.path.join("/var/www/monithon/monithon/monithon/templates"),
+TEMPLATE_DIRS = ( 
+        os.path.join("/var/www/monithon/Monithon-2.0/monithon/templates"),
     )
 
 AUTHENTICATION_BACKENDS = (

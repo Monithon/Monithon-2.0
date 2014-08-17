@@ -6,8 +6,8 @@ from customforms.models import Form as CustomForm
 from customforms.models import FormField
 
 class Report(models.Model):
-	author = models.ForeignKey(User)
-	project = models.ForeignKey(Project)
+	author = models.ForeignKey(User, related_name="reports")
+	project = models.ForeignKey(Project, related_name="reports")
 	datetime = models.DateTimeField(auto_now=True)
 	#finalized = models.BooleanField(default = False, editable=False)
 

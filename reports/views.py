@@ -51,9 +51,7 @@ def list_reports(request):
 
 	return render(request, "reports.html", {"count":count, "page":page+1, "pages":pages, "reports":reports, "next":page+1!=count})
 
-def show_report(request, id=None):
-	if id is not None:
-		pass
-	else:
-		p_f = int(request.REQUEST.get("page","1"))
-		return render(request, "reports.html")
+def show_report(request, id):
+	report = Report.objects.get(id=id)
+	
+	return render(request, "report.html", {"report":report})

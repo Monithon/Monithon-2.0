@@ -18,5 +18,8 @@ urlpatterns = patterns('',
     url(r'^accounts/logout$', "monithon.views.logout_view"),
     url(r'^accounts/profile/$', "monithon.views.profile", name="profile"),
     url(r'^accounts/profile/(?P<username>.*)$', "monithon.views.profile", name="profile_user"),
-    url(r'^accounts/', include('social.apps.django_app.urls', namespace='social'))
+    url(r'^accounts/', include('social.apps.django_app.urls', namespace='social')),
+
+    
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 )

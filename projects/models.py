@@ -13,6 +13,14 @@ class Project(models.Model):
 	date_from = models.DateField(null=True, blank=True)
 	date_to = models.DateField(null=True, blank=True)
 
+	@property
+	def concluded(self):
+	    return self.date_to is not None
+	
+	@property
+	def oc_page(self):
+		return "http://www.opencoesione.gov.it/progetti/%s/" % self.oc_url.split("/")[-1].split(".")[0]
+
 	def __str__(self):
 		return self.description
 
