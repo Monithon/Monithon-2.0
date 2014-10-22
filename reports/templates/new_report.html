@@ -2,6 +2,25 @@
 {% block content %}
 <div class="container">
 	<form id="{{name}}"  role="form" method="POST">
+	<div class="form-group">
+		<label>Progetto *</label>
+		{% if project %}
+		<input type="text" class="form-control" disabled value="{{project.description}}">
+		<input type="hidden" value="{{project.id}}" id="project">
+		{% else %}
+		<input type="text" class="form-control" id="project_name">
+		<input type="hidden" id="project">
+		{% endif %}
+	</div>
+	<div class="form-group">
+		<label>Team *</label>
+		<select id="team" name="team" class="form-control">
+		{% for team in request.user.monitor_profile.all.0.teams.all %}
+			<option value="{{team.id}}">{{team.name}}</option>
+		{% endfor %}
+		</select>
+	</div>
+		
 		<div id="main_form">
 		</div>
 
@@ -56,7 +75,7 @@ $(function(){
 		$('.form-area').each(function(i,e){
 			var origin = $(e).data("origin");
 			var area = {"origin":origin, "data":[]};
-			$(e).find("input").each(function(k,r){
+			$(e).find("input, textarea").each(function(k,r){
 				if($(r).attr("name")!==undefined &&  $(r).attr("name").indexOf("leaflet")<0)
 					if($(r).attr("type") == "checkbox" || $(r).attr("type") == "radio")
 						if($(r).is(":checked"))
@@ -72,10 +91,24 @@ $(function(){
 		$.ajax({
 			"url":"/reports/push",
 			"method":"POST",
-			"data":{"data":JSON.stringify({"report":ret, "project":1})}
+			"data":{"data":JSON.stringify({"report":ret}), "team":$("#team").val(), "project":$("#project").val()},
+			"success":function(data){
+				data = JSON.parse(data);
+				if (data.type == "OK"){
+					window.location = "/reports/"+data.id
+				}
+			}
 		});
 		e.preventDefault();
 		return false;
+	});
+
+	$("#project_name").change(function(){
+		if($(this).val().length >=3){
+			$.getJSON("/projects/search?q="+$(this).val(), function(data){
+				alert(data);
+			});
+		}
 	});
 });
 {% endblock %}

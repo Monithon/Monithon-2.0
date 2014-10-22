@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<h1>{{team.name}}</h1>
+	</div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			{{team.description|safe}}
+		</div>
+	</div>	
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<h2>I Report</h2>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+		{% for r in team.reports.all %}
+			<div class="col-md-2 alert alert-{%if r.validated %}success{%else%}info{%endif%}">
+				<div>
+				<a href="/reports/{{r.id}}"><i class="fa fa-fw fa-book"></i></a><b>{{r.project.description}}</b></div>
+				<div><i class="fa fa-fw fa-calendar"></i>{{r.datetime}}</div>
+			</div>
+		{% empty %}
+			Non ci sono ancora report di questo gruppo
+		{% endfor %}
+
+		</div>
+	</div>
+</div>
+
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<h2>Il Team</h2>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+		{% for m in team.members.all %}
+			<div class="col-md-2"><i class="fa fa-fw fa-users"></i><a href="/accounts/profile/{{m.user.username}}">{{m.user.username}}</a></div>
+		{% empty %}
+			Il gruppo è ancora vuoto. 
+		{% endfor %}
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<h2></h2>
+		{% if member %}
+		<a class="btn btn-danger col-md-12" href="/teams/{{team.id}}/leave?user={{request.user.username}}">Lascia il gruppo</a>
+		{% else %}
+		<a class="btn btn-success col-md-12" href="/teams/{{team.id}}/join?user={{request.user.username}}">Entra nel gruppo</a>
+		{% endif %}
+	</div>
+</div>
+
+
+
+
+
+{% endblock %}

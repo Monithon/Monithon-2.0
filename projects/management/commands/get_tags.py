@@ -32,7 +32,8 @@ class Command(BaseCommand):
         """
 
         next_url = OC_URL
-        while next_url is not None or next_url != "" or next_url != u"None":
+        while next_url is not None :
+            print ">>", next_url, type(next_url)
             try:
                 jj = requests.get(next_url).json()
                 if "next" in jj:
@@ -80,14 +81,15 @@ class Command(BaseCommand):
         """
 
         next_url = OC_URL
-        while next_url is not None or next_url != "" or next_url != "None":
+        while next_url is not None:
+            print ">>", next_url, type(next_url)
             jj = requests.get(next_url).json()
             if "next" in jj:
                 next_url = jj.get('next')
                 print ">>>", next_url
                 for result in jj.get('results'): 
                     print result
-                    l = Tags()
+                    l = Tag()
                     l.slug = result.get('slug')
                     l.name = result.get('short_label')
                     l.description = result.get('descrizione')

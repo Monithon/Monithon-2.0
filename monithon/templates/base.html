@@ -2,9 +2,10 @@
 <html>
 <head>
 	<title>Monithon</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
 	<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css' rel='stylesheet' />
 
@@ -38,11 +39,24 @@
 		            <li><a href="/reports/new"><i class="fa fa-fw fa-plus"></i>Nuovo Report</a></li>
 		          </ul>
 	        </li>
-	        <li class="dropdown"><a href="/projects" ><i class="fa fa-fw fa-bank"></i>Progetti</a></li>
-	        <li class="dropdown"><a href="/teams" ><i class="fa fa-fw fa-users"></i>Gruppi</a></li>
+	        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-cogs"></i>Progetti <i class="fa fa-fw fa-caret-down"></i></a>
+	        	 <ul class="dropdown-menu" role="menu">
+		            <li><a href="/projects"><i class="fa fa-fw fa-bars"></i>Tutti i Progetti</a></li>
+	        	 {% for category in categories %}
+		            <li><a href="/projects?category={{category.id}}"><i class="fa fa-fw fa-{{category.icon}}"></i>{{category.name}}</a></li>
+		         {% endfor %}
+		         </ul>
+	        </li>
+	        <li><a href="/teams" ><i class="fa fa-fw fa-users"></i>Gruppi</a></li>
+
+
+	      {% if request.user.is_superuser %}
+	        <li><a href="/mgmt" ><i class="fa fa-fw fa-eye"></i>Gestione</a></li>
+	        <li><a href="/admin" ><i class="fa fa-fw fa-wrench"></i>Admin</a></li>
+	      {% endif %}
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
-	      {% if request.user %}
+	      {% if request.user.is_authenticated %}
 	        <li><a href="/accounts/profile"><i class="fa fa-fw fa-user"></i>{{request.user.username}}</a></li>	
 	        <li><a href="/accounts/logout"><i class="fa fa-fw fa-sign-out"></i>Logout</a></li>	      
 	      {% else %}
@@ -56,10 +70,11 @@
 	{% block content %}
 	{% endblock %}
 	</div>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-	<script src="https://rawgit.com/Esri/esri-leaflet/master/dist/esri-leaflet.js"></script>
+	<script src="http://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
 	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js'></script>
 	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.3/Leaflet.fullscreen.min.js'></script>
 	<script>

@@ -6,8 +6,9 @@ from projects.models import *
 
 # Register your models here.
 
-admin.site.register(Project)
 admin.site.register(Location)
 admin.site.register(Geo)
 admin.site.register(Subject)
-admin.site.register(Tags)
+admin.site.register(Tag)
+admin.site.register(Monitorable)
+admin.site.register(MonitorableCategory)

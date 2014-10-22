@@ -1,0 +1,10 @@
+<div class="radios">
+{% for option in field.options %}
+<div class="checkbox">
+  <label>
+    <input type="checkbox" name="{{field.id}}" value="{{option}}">
+    {{option}}
+  </label>
+</div>
+{%endfor%}
+</div>

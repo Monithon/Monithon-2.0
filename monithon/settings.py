@@ -42,6 +42,8 @@ INSTALLED_APPS = (
     'projects',
     'social.apps.django_app.default',
     'oauth2_provider',
+    'monitor',
+    #'south',
 
 )
 
@@ -124,4 +126,5 @@ SOCIAL_AUTH_TWITTER_SECRET = 'ZD50FfvwYuyqzJKAKfipGNw4P1MqgdV67LzBE90FctswiAY4f3
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.request",
+    "projects.processor.request",
 )

@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^accounts/profile/$', "monithon.views.profile", name="profile"),
     url(r'^accounts/profile/(?P<username>.*)$', "monithon.views.profile", name="profile_user"),
     url(r'^accounts/', include('social.apps.django_app.urls', namespace='social')),
+    url(r'^teams/', include('monitor.urls')),
 
     
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),

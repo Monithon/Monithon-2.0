@@ -15,10 +15,10 @@ def get_form_structure(name):
 	form['fields'] = []
 
 	for field in data.fields.all():
-		form['fields'].append({'field':field.form_field.name, 'label':field.label, 'hint':field.hint, 'options':field.options.split("\n"), "list":field.list_field, "oblig":field.obligatory, "id":field.id})
-
-
-
+		if field.options is not None:
+			form['fields'].append({'field':field.form_field.name, 'label':field.label, 'hint':field.hint, 'options':field.options.split("\n"), "list":field.list_field, "oblig":field.obligatory, "id":field.id})
+		else:
+			form['fields'].append({'field':field.form_field.name, 'label':field.label, 'hint':field.hint, 'options':[""], "list":field.list_field, "oblig":field.obligatory, "id":field.id})
 	return form
 
 def get_form(request, name):

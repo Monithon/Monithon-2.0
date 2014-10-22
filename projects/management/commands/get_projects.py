@@ -51,13 +51,16 @@ class Command(BaseCommand):
 		next_url = OC_URL
 		while next_url is not None:
 
+			mc = MonitorableCategory.objects.get(name="OpenCoesione")
+
 			jj = requests.get(next_url).json()
 			if "next" in jj:
 				next_url = jj.get('next')
 				for result in jj.get('results'): 
 					if result.get('slug') is not None:
 						print result
-						l = Project()
+						l = Monitorable()
+						l.category = mc
 						l.cup = result.get("cup")
 						l.oc_slug = result.get("slug")
 						l.oc_url = result.get("url")
@@ -77,6 +80,11 @@ class Command(BaseCommand):
 							for t in result.get("territori"):
 								for ter in Location.objects.filter(slug=t):
 									l.locations.add(ter)
+
+						if result.get("tema") is not None:
+							for t in result.get("tema"):
+								for tag in Tag.objects.filter(slug=t):
+									l.tags.add(tag)
 
 			
 			else:

@@ -1,11 +1,38 @@
 {%extends "base.html"%}
 
 {% block content %}
-
+<div class="jumbotron">
+	<div class="container"><h1>Login</h1></div>
+</div>
+<form class="container" action="" method="post">
+	<div class="row"><h3>Entra con il tuo nome utente e la tua password.</h3></div>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-fw fa-user"></i></span>
+				<input class="form-control" placeholder="Username">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-fw fa-key"></i></span>
+				<input class="form-control col-xs-10" type="password" placeholder="Password">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<button type="submit" class="btn btn-large btn-default col-xs-12" disabled>Log In</button>
+		</div>
+	</div>
+</form>
 <div class="container">
+	<div class="row"><h3>Oppure scegli il servizio con il quale vuoi loggarti o iscriverti su Monithon.</h3></div>
 	{% for login in socials %}
 	<div class="row">
-		<a class="btn btn-warning col-sm-12" href="/accounts/login/{{login.url}}"><i class="fa fa-fw {{login.icon}}"></i>{{login.name}}</a>
+		<a class="btn btn-warning col-xs-12" href="/accounts/login/{{login.url}}"><i class="fa fa-fw {{login.icon}}"></i>{{login.name}}</a>
 	</div>
 	{% endfor %}
 </div>

@@ -1,12 +1,25 @@
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
 from django.contrib.gis.db import models
 
-class Project(models.Model):
-	cup = models.CharField(max_length=100, null=True, blank=True)
-	oc_slug = models.CharField(max_length=100)
+class MonitorableCategory(models.Model):
+	name = models.TextField()
+	icon = models.TextField()
+
+	def __str__(self):
+		return self.name
+
+class Monitorable(models.Model):
 	description = models.TextField()
-	oc_url = models.URLField(max_length=400)
-	subjects = models.ManyToManyField("Subject")
-	locations = models.ManyToManyField("Location")
+	subjects = models.ManyToManyField("Subject", blank=True, null=True)
+	locations = models.ManyToManyField("Location", blank=True, null=True)
+	tags = models.ManyToManyField("Tag", blank=True, null=True)
+	category = models.ForeignKey(MonitorableCategory, blank=True, null=True)
+	cup = models.CharField(max_length=100, null=True, blank=True)
+	oc_slug = models.CharField(max_length=100, null=True, blank=True)
+	oc_url = models.URLField(max_length=400,null=True, blank=True)
 	total_amount = models.FloatField(null=True, blank=True)
 	paid_amount = models.FloatField(null=True, blank=True)
 	paid_percent = models.FloatField(null=True, blank=True)
@@ -19,11 +32,11 @@ class Project(models.Model):
 	
 	@property
 	def oc_page(self):
-		return "http://www.opencoesione.gov.it/progetti/%s/" % self.oc_url.split("/")[-1].split(".")[0]
+		if self.oc_url:
+			return "http://www.opencoesione.gov.it/progetti/%s/" % self.oc_url.split("/")[-1].split(".")[0]
 
 	def __str__(self):
 		return self.description
-
 
 
 class Location(models.Model):
@@ -52,11 +65,19 @@ class Subject(models.Model):
 	def __str__(self):
 		return self.name
 
-class Tags(models.Model):
+class Tag(models.Model):
 	name = models.TextField()
 	description = models.TextField()
 	slug = models.TextField(unique=True)
 	tagtype = models.TextField()
 	url = models.URLField(null=True, blank=True,max_length=400)
+	def __str__(self):
+		return self.name
+
+class Layer(models.Model):
+	name = models.CharField(max_length=500)
+	icon = models.URLField()
+	projects = models.ManyToManyField(Monitorable, related_name="layers")
+
 	def __str__(self):
 		return self.name
