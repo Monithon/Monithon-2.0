@@ -5,10 +5,16 @@
 
 {% for report in reports %}
 <div class="report" data-report="{{report.id}}">
-	<h3>{{report.name}}</h3>
-
+	<div class="container jumbotron">
+		<h3><i class="fa fa-fw fa-book"></i>{{report.title}} <a href="{% url "reports.views.show_report" report.id %}"><i class="fa fa-fw fa-external-link"></i></a><small>{{report.datetime}}</small></h3>
+		<!--<div class="col-lg-12"><i class="fa fa-fw fa-eur"></i>{{report.project.paid_amount}}/{{report.project.total_amount}}</div>-->
+		<div class=" col-lg-12">{% for tag in report.project.tags.all %} <i class="fa fa-fw fa-tag"></i>{{tag.name}} {% endfor%}</div>
+	</div>
 </div>
 {% endfor %}
 
 
+<div class="row">
+<center>{% if prev > 0 %}<a href="/reports/?p={{prev}}">Previous</a>{% endif %} ({{count}}) {% if next < count %}<a href="/reports/?p={{next}}">Next</a>{% endif %}</center>
+</div>
 {% endblock %}

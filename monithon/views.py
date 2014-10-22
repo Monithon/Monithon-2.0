@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
 def index(request):
-	return render_to_response("index.html")
+	return render(request, "index.html")
 
 def logins(request):
 	return render(request, "logins.html", {
@@ -21,6 +21,10 @@ def logins(request):
 			"name":"Twitter", 
 			"icon":"fa-twitter",
 			"url":"twitter"
+		},{
+			"name":"A Scuola di Open Coesione", 
+			"icon":"fa-circle",
+			"url":"asoc"
 		}]})
 
 def profile(request, username=None):
@@ -45,6 +49,10 @@ def profile(request, username=None):
 
 
 	return render(request, "profile.html", {
+
+		"is_own":request.user.username == username,
+		"selected_user":selected_user,
+
 		"profile":{
 			"username":selected_user.username,
 			"email":selected_user.email,
@@ -63,6 +71,10 @@ def profile(request, username=None):
 			"name":"Twitter", 
 			"icon":"fa-twitter",
 			"url":"twitter"
+		},{
+			"name":"A Scuola di Open Coesione", 
+			"icon":"fa-circle",
+			"url":"asoc"
 		}]
 	})
 
