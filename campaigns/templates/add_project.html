@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<h1><i class="fa fa-fw fa-rocket"></i> {{campaign.name}}</h1>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<form role="form" class="form-horizontal" method="POST">
+		<fieldset>
+		  <div class="form-group">
+                <input type="text" class="form-control floating-label" id="project" name="url" placeholder="URL Progetto">
+            </div>
+		  <button type="submit" class="btn btn-default btn-raised"><i class="fa fa-fw fa-plus"></i>Aggiungi</button>
+		 </fieldset>
+		</form>
+	</div>
+</div>
+{% endblock %}

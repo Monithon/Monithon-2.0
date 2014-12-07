@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<h1>Campagne <small class="pull-right"><a href="/campaigns/add" class="btn btn-success"><i class="fa fa-fw fa-plus"></i></a></small></h1>
+	</div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+	{% for campaign in campaigns %}
+		<div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4><i class="fa fa-fw fa-rocket"></i> <a href="/campaigns/{{campaign.id}}">{{campaign.name}}</a></div></h4>
+				<div class="panel-body">{{campaign.description}}</div>
+				<div class="panel-footer">
+
+					<span title="Utenti"><i class="fa fa-fw fa-user"></i> {{campaign.users.all.count}}</span>
+					<span title="Progetti"><i class="fa fa-fw fa-gear"></i> {{campaign.projects.all.count}}</span>
+					<span title="Report"><i class="fa fa-fw fa-book"></i> {{campaign.reports.all.count}}</span>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+</div>
+{% endblock %}

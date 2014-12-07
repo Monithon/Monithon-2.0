@@ -46,16 +46,22 @@ $(function(){
 {% endblock %}
 
 {% block content %}
-
-
+<div class="jumbotron">
+	<div class="container">
+		<h1>Progetti</h1>
+	</div>
+</div>
+<div class="container">
 {% for project in projects %}
 <div class="project" data-report="{{project.id}}">
-	<div class="jumbotron {%if project.concluded%}concluded{%endif%}">
-		<div class="container ">
+	<div class="panel panel-default {%if project.concluded%}concluded{%endif%}">
+		<div class="panel-heading ">
 			<div class="col-lg-2 concluded_badge" title="Concluso!">C</div>
 			<div class="row">
-				<h3 class="col-lg-10"><i class="fa fa-fw  fa-institution"></i>{{project.description}}<a href="{% url "projects.views.get_project" cup=project.id %}"><i class="fa fa-fw fa-external-link"></i></a></h3>
+				<h3 class="col-lg-10"><i class="fa fa-fw  fa-institution"></i><a href="{% url "projects.views.get_project" cup=project.id %}">{{project.description}}</a></h3>
 			</div>
+		</div>
+		<div class="panel-body">
 			<div class="row">
 				<div class="col-sm-2 map_container" id="map_container_{{project.id}}"></div>
 				<div class="col-sm-10">
@@ -67,15 +73,19 @@ $(function(){
 					<div class=" col-lg-12">{% for loc in project.locations.all %} <i class="fa fa-fw fa-globe"></i>{{loc.name}} {% endfor%}</div>
 					<div class=" col-lg-12">{% for tag in project.tags.all %} <i class="fa fa-fw fa-tag"></i>{{tag.name}} {% endfor%}</div>
 					<div class=" col-lg-12">
-					{%for report in project.reports.all %} <a class="btn btn-sm btn-{%if report.validated%}success{%else%}default{%endif%} col-lg-2" href="/reports/{{report.id}}"><i class="fa fa-fw fa-book"></i>Report - {{report.author}}</a>{% endfor %}</div>
+					{%for report in project.reports.all %} <a class="btn btn-sm btn-{%if report.validated%}success{%else%}default{%endif%} col-lg-12" href="/reports/{{report.id}}"><i class="fa fa-fw fa-book"></i>Report - {{report.author}}</a>{% endfor %}</div>
 				</div>
-					
 			</div>
-			<a href="/reports/new?project={{project.id}}" class="row col-lg-12 btn btn-small btn-primary">Crea Report</a>
+		</div>
+		<div class="panel-footer">
+			<a href="/reports/new?project={{project.id}}" class=" btn btn-small btn-flat btn-primary">Crea Report</a>
+			<a href="/projects/{{project.id}}/upload" class=" btn btn-small btn-flat btn-primary">Carica File</a>
+		
+		</div>
 		</div>
 	</div>
-</div>
 {% endfor %}
+</div>
 
 <div class="row">
 <center>{% if prev > 0 %}<a href="/projects/?p={{prev}}">Previous</a>{% endif %} ({{count}}) {% if next < count %}<a href="/projects/?p={{next}}">Next</a>{% endif %}</center>

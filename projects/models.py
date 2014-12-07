@@ -12,6 +12,7 @@ class MonitorableCategory(models.Model):
 		return self.name
 
 class Monitorable(models.Model):
+	#title = models.TextField(blank=True, null=True)
 	description = models.TextField()
 	subjects = models.ManyToManyField("Subject", blank=True, null=True)
 	locations = models.ManyToManyField("Location", blank=True, null=True)
@@ -25,6 +26,7 @@ class Monitorable(models.Model):
 	paid_percent = models.FloatField(null=True, blank=True)
 	date_from = models.DateField(null=True, blank=True)
 	date_to = models.DateField(null=True, blank=True)
+	#original_data = models.TextField(blank=True, null=True)
 
 	@property
 	def concluded(self):

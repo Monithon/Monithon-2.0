@@ -26,6 +26,13 @@ class Report(models.Model):
 	def geoj(self):
 		return json.dumps(json.loads(self.position.json))
 
+	def description(self):
+		for form in self.forms.all():
+			for field  in form.fields.all():
+				if "Descr" in field.field.label:
+					return field.value
+		return ""
+
 class ReportForm(models.Model):
 	report = models.ForeignKey(Report, related_name="forms")
 	form = models.ForeignKey(CustomForm)
@@ -44,3 +51,18 @@ class ReportImage(models.Model):
 class ReportLink(models.Model):
 	report = models.ForeignKey(Report, related_name="links")
 	link = models.URLField(max_length=1000)
+
+	def panel_body(self):
+		try:
+			if "youtu" in self.link:
+				the_vid = self.link
+				if ".be" in self.link:
+					the_vid = the_vid.split("youtu.be/")[1]
+				else:
+					the_vid = the_vid.split("v=")[1]
+				return """<div class='panel-body'><iframe class="col-lg-12" height="315" src="//www.youtube.com/embed/%s" frameborder="0" allowfullscreen></iframe></div>""" % the_vid
+
+			else:
+				return ""
+		except:
+			return ""

@@ -70,21 +70,52 @@ $(function(){
 				
 			</div>
 				
-			<img src="{{qr}}" class="col-sm-2" />
+			<img src="{{qr}}" class="col-sm-2 and-hide" />
 		</div>
 		<div class="row">&nbsp;</div>
 		<div class="row">
 			{%for report in project.reports.all %} 
-			<div class="col-lg-3 alert alert-{%if report.validated %}success{%else%}info{%endif%}">	
-				<h3>Report</h3>
-				<div class="row"><div class="col-lg-12"><i class="fa fa-fw fa-user"></i>{{report.author}} - <i class="fa fa-fw fa-calendar"></i>{{report.datetime}}</div></div>
-				<a href="/reports/{{report.id}}"><i class="fa fa-fw fa-book"></i>Visualizza</a>
+			<div class="col-lg-4">
+				<div class="panel panel-{%if report.validated %}success{%else%}info{%endif%}">	
+					<div class="panel-heading">
+						<h3>Report</h3>
+					</div>
+					<div class="panel-body">
+						<div class="col-lg-12">
+							<i class="fa fa-fw fa-user"></i>{{report.author}}<br/>
+							<i class="fa fa-fw fa-calendar"></i>{{report.datetime}}
+						</div>
+					</div>
+					<div class="panel-footer">
+						<a href="/reports/{{report.id}}"><i class="fa fa-fw fa-book"></i>Visualizza</a>
+						</div>
+					</div>
+				</div>
 			</div>
+			{% endfor %}
+		</div>
+		<div class="row">
+			{%for file in project.uploads.all %} 
+			<div class="col-lg-4">
+				<div class="panel panel-default">	
+					<div class="panel-heading">
+						<h3>{{file.upload_type}}  {{file.name}}</h3>
+					</div>
+					<div class="panel-body">
+						<a href="/projects/{{project.id}}/files/{{file.id}}">Download the file</a>
+					</div>
+					<div class="panel-footer">
+							<i class="fa fa-fw fa-user"></i>{{file.author}} | <i class="fa fa-fw fa-calendar"></i>{{file.relative_to}}
+						</div>
+					</div>
+				</div>
 			{% endfor %}
 		</div>
 	</div>
 	<div class="container">
-		<a href="/reports/new?project={{project.id}}" class="row col-lg-12 btn btn-small btn-primary">Crea Report</a>
+			<a href="/reports/new?project={{project.id}}" class=" btn btn-small btn-flat btn-primary">Crea Report</a>
+			<a href="/projects/{{project.id}}/upload" class="and-hide btn btn-small btn-flat btn-primary">Carica File</a>
+
 	</div>
 </div>
 

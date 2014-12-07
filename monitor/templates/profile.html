@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block style%}
+.jumbotron img{
+	float:left;
+	margin:10px;
+	-webkit-transform: rotate(-6deg);
+}
+
+
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<img src="{{profile.gravatar}}">
+		<h1>{{profile.username}}</h1>
+	</div>
+</div>
+
+<div class="container">
+{% if selected_user.monitor_profile.all.0.badges.count > 0 %}
+	
+	<div class="jumbotron"><h2>Badges</h2></div>
+	<div class="row">
+	{% for badge in selected_user.monitor_profile.all.0.badges%}
+		
+	{% endfor %}
+	</div>
+
+	{% endif %}
+
+{% if selected_user.monitor_profile.all.0.teams.count > 0 %}
+	<div class="jumbotron"><h2>Gruppi</h2></div>
+	<div class="row">
+	{% for team in selected_user.monitor_profile.all.0.teams.all%}
+		<div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4><i class="fa fa-fw fa-group"></i><a hreF="/teams/{{team.id}}">{{team.name}}</a></h4>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+
+	</div>
+	{% endif %}
+{% if selected_user.events_organized.count > 0 %}
+	<div class="jumbotron"><h2>Events</h2></div>
+	<div class="row">
+	{% for team in selected_user.events_organized.all%}
+		<div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<h4><i class="fa fa-fw fa-group"></i><a hreF="/event/{{event.id}}">{{event.name}}</a></h4>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+
+	</div>
+	{% endif %}
+
+
+	{% if is_own %}
+	<div class="jumbotron"><h2>Profiles</h2></div>
+	{% for login in socials %}
+		<a class="btn btn-warning " href="/accounts/login/{{login.url}}"><i class="fa fa-fw {{login.icon}}"></i>{{login.name}}</a>
+	{% endfor %}
+
+	{% endif %}
+	<div class="row">&nbsp;</div>
+
+
+</div>
+{% endblock %}

@@ -3,20 +3,30 @@
 <head>
 	<title>Monithon</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-	<link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+	<!--<link href="//netdna.bootstrapcdn.com/bootswatch/3.3.0/paper/bootstrap.min.css" rel="stylesheet">-->
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.0/css/material.min.css" rel="stylesheet" />
+	<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.0/css/ripples.min.css" rel="stylesheet" />
+	<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.0/css/material-wfont.min.css" rel="stylesheet" />
+
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
 	<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css' rel='stylesheet' />
 
 	<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.3/leaflet.fullscreen.css' rel='stylesheet' />
 	<style>
+
+	body { padding-top: 80px; }
+	.map_container{
+		margin-top: -15px;
+		margin-bottom: -15px;
+	}
 	{% block style %}
 	{% endblock %}
 	</style>
 </head>
 <body>
-	<nav class="navbar navbar-default" role="navigation" id="navbar">
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navbar">
 	  <div class="container-fluid">
 	    <!-- Brand and toggle get grouped for better mobile display -->
 	    <div class="navbar-header">
@@ -26,13 +36,13 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="navbar-brand" href="/">Monithon</a>
+	      <a class="navbar-brand" href="/"><img alt="Brand" src="data:image/png;base64,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"></a>
 	    </div>
 
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav">
-	        <li><a href="/blog"><i class="fa fa-fw fa-comment"></i>Blog</a></li>
+	        <li><a href="http://www.monithon.it/blog/en/" target="_blank"><i class="fa fa-fw fa-comment"></i>Blog</a></li>
 	        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-book"></i>Report <i class="fa fa-fw fa-caret-down"></i></a>
 	        	 <ul class="dropdown-menu" role="menu">
 		            <li><a href="/reports"><i class="fa fa-fw fa-bars"></i>Tutti i Report</a></li>
@@ -42,9 +52,19 @@
 	        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-cogs"></i>Progetti <i class="fa fa-fw fa-caret-down"></i></a>
 	        	 <ul class="dropdown-menu" role="menu">
 		            <li><a href="/projects"><i class="fa fa-fw fa-bars"></i>Tutti i Progetti</a></li>
-	        	 {% for category in categories %}
+					{% for category in categories %}
 		            <li><a href="/projects?category={{category.id}}"><i class="fa fa-fw fa-{{category.icon}}"></i>{{category.name}}</a></li>
-		         {% endfor %}
+					{% endfor %}
+		         </ul>
+	        </li>
+	        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-rocket"></i>Campagne <i class="fa fa-fw fa-caret-down"></i></a>
+	        	 <ul class="dropdown-menu" role="menu">
+		            <li><a href="/campaigns"><i class="fa fa-fw fa-bars"></i>Tutte le campagne</a></li>
+		            <li><a href="/campaigns/add"><i class="fa fa-fw fa-plus"></i> Nuova campagna</a></li>
+		            <li class="divider"></li>
+	        	 	{% for campaign in campaigns %}
+		            <li><a href="/campaigns/{{campaign.id}}"><i class="fa fa-fw fa-tag"></i> {{campaign.name}}</a></li>
+		         	{% endfor %}
 		         </ul>
 	        </li>
 	        <li><a href="/teams" ><i class="fa fa-fw fa-users"></i>Gruppi</a></li>
@@ -66,18 +86,30 @@
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
 	</nav>
-	<div id="content">
+	<div id="content" style="margin-top:-20px">
 	{% block content %}
 	{% endblock %}
 	</div>
 
 	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+	<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.0/js/material.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.0/js/ripples.js"></script>
+
 	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 	<script src="http://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
 	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js'></script>
 	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.3/Leaflet.fullscreen.min.js'></script>
+
 	<script>
+	$(function() {
+		$.material.init();
+
+	    if(typeof Android != "undefined"){
+	    	$(".and-hide").hide();
+	    }
+	});
 	{% block jscontent %}
 	{% endblock %}
 

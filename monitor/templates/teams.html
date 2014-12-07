@@ -10,10 +10,19 @@
 		
 		<div class="row">
 			{% for team in teams %}
-			<div class="jumbotron">
-				<h2><a href="/teams/{{team.id}}">{{team.name}}</a></h2>
-				<div><i class="fa fa-fw fa-users"></i>membri: {{team.members.all.count}}</div>
-				<div><i class="fa fa-fw fa-book"></i>report: {{team.reports.all.count}}</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h2><i class="fa fa-fw fa-users"></i> <a href="/teams/{{team.id}}">{{team.name}}</a></h2>
+					</div>
+					<div class="panel-body">
+						{{team.mission}}
+					</div>
+					<div class="panel-footer">
+						<div><i class="fa fa-fw fa-users"></i> membri: {{team.members.all.count}}
+						 <i class="fa fa-fw fa-book"></i> report: {{team.reports.all.count}}</div>
+					</div>
+				</div>
 			</div>
 			{% endfor %}
 		</div>

@@ -19,6 +19,8 @@
 	}
 
 	.closer{clear:both;}
+
+	
 {% endblock %}
 
 {% block content %}
@@ -29,30 +31,85 @@
 
 M = {};
 M.resize = function(){
-	$('#content').height($(window).height()-$('#navbar').height()-2);
+	$('#content').height($(window).height()-$('#navbar').height());
 	$('#map').width($(window).width());
 };
-
+M.vector_l = {};
 function onEachFeature(feature, layer) {
-    layer.bindPopup("<h3>"+feature.properties.title+"</h3><p><a href=\"/reports/"+feature.properties.id+"\">Vai al Report</a>");
+    layer.bindPopup("<div class='panel panel-default'><div class='panel-heading'><h3>"+feature.properties.title+"</h3></div><div class='panel-footer'><p><a href=\"/reports/"+feature.properties.id+"\">Vai al Report</a></p></div></div>");
+    for (var i in feature.properties.campaigns){
+    	M.vector_l[feature.properties.campaigns[i]].addLayer(layer);
+    }
 }
 
 $(function(){
 	$(window).resize(M.resize);
 	M.resize();
 
-	var map = L.map('map').setView([42.715, 15.271], 6);
+	function arrayUnique(array) {
+	    var a = array.concat();
+	    for(var i=0; i<a.length; ++i) {
+	        for(var j=i+1; j<a.length; ++j) {
+	            if(a[i] === a[j])
+	                a.splice(j--, 1);
+	        }
+	    }
+
+	    return a;
+	};
+
+	var the_layer;
+	function show_data(data){
+
+		try{
+			the_layer.removeFrom(map);
+		} catch(e){}
+
+		for (var i in M.vector_l){
+			try{
+				M.vector_l[i].removeFrom(map);
+			} catch(e){}		
+		}
+			
+    	for(var i in data.features){
+    		try{
+    			vectors = vectors.concat(data.features[i].properties.campaigns)
+    		} catch ( e ) {}
+    	}
+    	vectors = arrayUnique(vectors);
+
+    	for (var i in vectors){
+    		M.vector_l[vectors[i]] = L.layerGroup();
+    	}
+
+    	M.vector_l["All"] = L.geoJson(data,{
+    		onEachFeature: onEachFeature
+    	}).addTo(map);
+
+    	the_layer = L.control.layers({"OSM":osmLayer, "Imagery":imagery},M.vector_l).addTo(map);
+    };
+
+	var map = L.map('map');
+
+    function get_data(){
+    	$.getJSON("/reports/geojson", {"bbox":map.getBounds().toBBoxString()}, show_data);
+    }
+
 	var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
     var imagery = L.esri.basemapLayer("Imagery").addTo(map);
-    L.control.layers({"OSM":osmLayer, "Imagery":imagery},{}).addTo(map);
+    var vectors = [];
     L.control.fullscreen().addTo(map);
-    $.getJSON("/reports/geojson", function(data){
-    	L.geoJson(data,{
-    		onEachFeature: onEachFeature
-    	}).addTo(map);
-    });
+
+    map.on("moveend", get_data);
+
+    if(typeof Android != "undefined"){
+    	map.locate({setView: true, maxZoom: 16});
+    }
+    else{
+		map.setView([42.715, 15.271], 6);
+    }
 
 });
 {% endblock %}

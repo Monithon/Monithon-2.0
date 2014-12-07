@@ -75,7 +75,8 @@ def reports_json(request):
 			"geometry":json.loads(r.position.json),
 			"properties":{
 				"title":r.title,
-				"id":r.id
+				"id":r.id,
+				"campaigns":[c.campaign.name for c in r.campaigns.all()]
 			}
 		} for r in Report.objects.filter(finalized=True)]
 	}

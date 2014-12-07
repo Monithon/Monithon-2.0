@@ -44,7 +44,9 @@ INSTALLED_APPS = (
     'oauth2_provider',
     'monitor',
     #'south',
-
+    'campaigns',
+    'events',
+    'uploads'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -92,6 +94,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+UPLOAD_FILES = os.path.join("/var/www/monithon/files/")
+
 TEMPLATE_DIRS = ( 
         os.path.join("/var/www/monithon/Monithon-2.0/monithon/templates"),
     )
@@ -104,8 +108,8 @@ AUTHENTICATION_BACKENDS = (
       'social.backends.facebook.Facebook2OAuth2',
       'social.backends.twitter.TwitterOAuth',
       'social.backends.github.GithubOAuth2',
-      'django.contrib.auth.backends.ModelBackend',
-  )
+      'django.contrib.auth.backends.ModelBackend'
+,  )
 
 
 SOCIAL_AUTH_FACEBOOK_KEY = '728323867229355'
@@ -127,4 +131,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.request",
     "projects.processor.request",
+    "campaigns.processor.request",
 )

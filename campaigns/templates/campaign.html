@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<h1><i class="fa fa-fw fa-rocket"></i> {{campaign.name}} <small><i class="fa fa-fw fa-users"></i>{{campaign.users.all.count}}</small>  {%if endorsed %}<small><a href="/campaigns/{{campaign.id}}/unendorse" class="btn btn-raised pull-right btn-default"><i class="fa fa-fw fa-users"></i> Unjoin</a></small>{% else %}<small><a href="/campaigns/{{campaign.id}}/endorse" class="btn btn-raised btn-danger pull-right btn-default"><i class="fa fa-fw fa-users"></i> Join!</a></small>{% endif %}</h1>
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">{{campaign.description}}</div>
+	</div>
+</div>
+
+
+<div class="jumbotron">
+	<div class="container">
+		<h2>Progetti{% if user.is_superuser %}<small><a href="/campaigns/{{campaign.id}}/add" class="btn btn-flat btn-success pull-right btn-default"><i class="fa fa-fw fa-plus"></i></a></small>{% endif %}</h2>
+		
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+	{% for project in campaign.projects.all %}
+		<div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4><i class="fa fa-fw  fa-institution"></i> <a href="/projects/{{project.project.id}}">{{project.project.description}}</a></h4>
+				</div>
+				<div class="panel-body">{{project.project.description}}</div>
+				<div class="panel-footer"></div>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+</div>
+
+<div class="jumbotron">
+	<div class="container">
+		<h2>Report</h2>
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+	{% for report in campaign.reports.all %}
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4><i class="fa fa-fw  fa-book"></i> <a href="/reports/{{report.report.id}}">{{report.report.title}}</a></h4>
+				</div>
+				<div class="panel-body">{{report.report.description}}</div>
+				<div class="panel-footer">
+				<i class="fa fa-fw fa-user"></i>{{report.report.author}}</div>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+</div>
+{% endblock %}

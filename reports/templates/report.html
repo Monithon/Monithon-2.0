@@ -48,29 +48,49 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="container">
-		<div class="row"></div>
+		<div class="row">
+		<div class="col-md-12">
 		{% for form in report.forms.all %}
+			<div class="panel panel-success">
+			<div class="panel-heading">
 			<h2>{{form.form.name}}</h2>
+			</div>
+			<div class="panel-body">
 			{% for field in form.fields.all %}
-			<div class="row col-md-12">
-				<div class="name">{{field.field.label}}</div>
-				<div class="value">{{field.value|urlize}}</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="name">{{field.field.label}}</div>
+					<div class="value">{{field.value|urlize}}</div>
+				</div>
 			</div>
 			{% endfor %}
+			</div>
 		{% endfor %}
+		</div>
+		</div>
+	</div>
 	</div>
 
 	{% if report.links.count > 0 %}
-	<div class="container">
 		<div class="jumbotron">
+	<div class="container">
 			<h4>Links</h4>
 		</div>
-		{% for link in report.links.all %}
+		</div>
+	<div class="container">
 
-		<div class="col-lg-12"><a href="{{link.link}}" target="_blank"><i class="fa fa-fw fa-globe"></i>{{link.link}}</div>
+		<div class="row">
+		{% for link in report.links.all %}
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				{{link.panel_body|safe}}
+				<div class="panel-footer">
+					<a href="{{link.link}}" target="_blank"><i class="fa fa-fw fa-globe"></i>{{link.link}}</a>
+				</div>
+			</div>
+		</div>
 		{% endfor %}
+		</div
 	</div>
 	{% endif %}
 </div>
