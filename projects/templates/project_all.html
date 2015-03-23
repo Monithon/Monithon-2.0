@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{%  block style %}
+
+
+.concluded_badge{
+	display:block;
+	float:right;
+	background-color:green;
+	width:60px;
+	height:60px;
+	color:white;
+	font-weight:bold;
+	border-radius:60px;
+	text-align:center;
+	vertical-align:middle;
+	line-height:60px;
+	-webkit-transform:rotate(7deg);
+	
+}
+
+.concluded_badge{
+	display:none;
+}
+
+.concluded .concluded_badge{
+	display:initial;
+}
+
+.map_container{
+	height:100%;
+	min-height:240px;
+}
+{% endblock %}
+
+{% block jscontent %}
+$(function(){
+	$(".map_container").each(function(i,e){
+		var map= L.map($(e).attr("id")).setView([42.715, 15.271], 5);
+		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+	});
+});
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+
+<div class="project" data-report="{{project.id}}">
+	<div class="jumbotron {%if project.concluded%}concluded{%endif%}">
+		<div class="container ">
+			<div class="col-lg-2 concluded_badge" title="Concluso!">C</div>
+			<div class="row">
+				<h3 class="col-lg-12"><i class="fa fa-fw  fa-institution"></i>{{project.description}}</h3>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-2 map_container" id="map_container_{{project.id}}"></div>
+			<div class="col-sm-8">
+
+				<div class="col-lg-12"><a href="{{project.LINK}}" target="_blank"><i class="fa fa-fw fa-code"></i>{{project.cup}}</a></div>
+				<div class="col-lg-12"><i class="fa fa-fw fa-tag"></i>{{project.DPS_TEMA_SINTETICO}} - <i class="fa fa-fw fa-tag"></i>{{project.QSN_DESCR_TEMA_PRIORITARIO_UE}}</div>
+				<div class="col-lg-12"><i class="fa fa-fw fa-file-o"></i>{{project.DPS_DESCRIZIONE_PROGRAMMA}}</div>
+				<div class="col-lg-12"><i class="fa fa-fw fa-crosshairs"></i>{{project.PO_DENOMINAZIONE_ASSE }} - {{project.PO_OBIETTIVO_OPERATIVO  }}</div>
+				{% if project.DESCRIZIONE_GRANDE_PROGETTO %}<div class="col-lg-12"><i class="fa fa-fw fa-bank"></i>{{project.DESCRIZIONE_GRANDE_PROGETTO}}</div>{%endif%}
+				<div class="col-lg-12"><i class="fa fa-fw fa-eye"></i>{{project.DESCR_PROCED_ATTIVAZIONE }} ({{project.DESCR_TIPO_PROCED_ATTIVAZIONE }})</div>
+				<div class="col-lg-12"><i class="fa fa-fw fa-file-o"></i>{{project.DPS_DESCRIZIONE_PROGRAMMA}}</div>
+
+				<div class="col-lg-12"><i class="fa fa-fw fa-eur"></i>{{project.TOT_PAGAMENTI }}/{{project.FINANZ_TOTALE_PUBBLICO }}</div>
+				<div class=" col-lg-12"><i class="fa fa-fw fa-calendar"></i>{{project.DPS_DATA_INIZIO_EFFETTIVA}} - {{project.DPS_DATA_FINE_EFFETTIVA}}</div>
+				<div class=" col-lg-12">{% for sub in project.subjects.all %} <i class="fa fa-fw fa-tag"></i>{{sub.name}} {% endfor%}</div>
+				<div class=" col-lg-12">{% for loc in project.locations.all %} <i class="fa fa-fw fa-globe"></i>{{loc.name}} {% endfor%}</div>
+				
+			</div>
+				
+			<img src="{{qr}}" class="col-sm-2 and-hide" />
+		</div>
+		<div class="row hidden">
+			<div class="col-sm-12">COD_LOCALE_PROGETTO:{{project.COD_LOCALE_PROGETTO}}</div>
+			<div class="col-sm-12">DESCRIZIONE_ATECO:{{project.DESCRIZIONE_ATECO}}</div>
+			<div class="col-sm-12">DESCRIZIONE_GRANDE_PROGETTO:{{project.DESCRIZIONE_GRANDE_PROGETTO}}</div>
+			<div class="col-sm-12">QSN_DESCR_OBIETTIVO_GENERALE:{{project.QSN_DESCR_OBIETTIVO_GENERALE}}</div>
+			<div class="col-sm-12">CUP_COD_TIPOLOGIA:{{project.CUP_COD_TIPOLOGIA}}</div>
+			<div class="col-sm-12">LINK:{{project.LINK}}</div>
+			<div class="col-sm-12">DPS_FINANZ_TOT_PUB_NETTO:{{project.DPS_FINANZ_TOT_PUB_NETTO}}</div>
+			<div class="col-sm-12">FINANZ_TOTALE_PUBBLICO:{{project.FINANZ_TOTALE_PUBBLICO}}</div>
+			<div class="col-sm-12">FINANZ_RISORSE_LIBERATE:{{project.FINANZ_RISORSE_LIBERATE}}</div>
+			<div class="col-sm-12">FINANZ_REGIONE:{{project.FINANZ_REGIONE}}</div>
+			<div class="col-sm-12">FINANZ_UE:{{project.FINANZ_UE}}</div>
+			<div class="col-sm-12">FINANZ_ALTRO_PUBBLICO:{{project.FINANZ_ALTRO_PUBBLICO}}</div>
+			<div class="col-sm-12">FINANZ_STATO_PAC:{{project.FINANZ_STATO_PAC}}</div>
+			<div class="col-sm-12">FINANZ_STATO_ESTERO:{{project.FINANZ_STATO_ESTERO}}</div>
+			<div class="col-sm-12">FINANZ_PRIVATO:{{project.FINANZ_PRIVATO}}</div>
+			<div class="col-sm-12">FINANZ_DA_REPERIRE:{{project.FINANZ_DA_REPERIRE}}</div>
+			<div class="col-sm-12">FINANZ_PROVINCIA:{{project.FINANZ_PROVINCIA}}</div>
+			<div class="col-sm-12">FINANZ_STATO_ALTRI_PROVVEDIMENTI:{{project.FINANZ_STATO_ALTRI_PROVVEDIMENTI}}</div>
+			<div class="col-sm-12">FINANZ_STATO_FSC:{{project.FINANZ_STATO_FSC}}</div>
+			<div class="col-sm-12">FINANZ_COMUNE:{{project.FINANZ_COMUNE}}</div>
+			<div class="col-sm-12">FINANZ_STATO_FONDO_DI_ROTAZIONE:{{project.FINANZ_STATO_FONDO_DI_ROTAZIONE}}</div>
+			<div class="col-sm-12">CUP_COD_NATURA:{{project.CUP_COD_NATURA}}</div>
+			<div class="col-sm-12">DESCR_LINEA:{{project.DESCR_LINEA}}</div>
+			<div class="col-sm-12">DPS_DATA_FINE_EFFETTIVA:{{project.DPS_DATA_FINE_EFFETTIVA}}</div>
+			<div class="col-sm-12">QSN_COD_TEMA_PRIORITARIO_UE:{{project.QSN_COD_TEMA_PRIORITARIO_UE}}</div>
+			<div class="col-sm-12">QSN_COD_OBIETTIVO_GENERALE:{{project.QSN_COD_OBIETTIVO_GENERALE}}</div>
+			<div class="col-sm-12">CUP_DESCR_TIPOLOGIA:{{project.CUP_DESCR_TIPOLOGIA}}</div>
+			<div class="col-sm-12">ECONOMIE_TOTALI:{{project.ECONOMIE_TOTALI}}</div>
+			<div class="col-sm-12">COD_STRUMENTO:{{project.COD_STRUMENTO}}</div>
+			<div class="col-sm-12">DPS_COD_FONTE:{{project.DPS_COD_FONTE}}</div>
+			<div class="col-sm-12">PO_CODICE_ASSE:{{project.PO_CODICE_ASSE}}</div>
+			<div class="col-sm-12">PO_COD_OBIETTIVO_OPERATIVO:{{project.PO_COD_OBIETTIVO_OPERATIVO}}</div>
+			<div class="col-sm-12">DPS_FLAG_PAC:{{project.DPS_FLAG_PAC}}</div>
+			<div class="col-sm-12">DESCR_STRUMENTO:{{project.DESCR_STRUMENTO}}</div>
+			<div class="col-sm-12">QSN_COD_PRIORITA:{{project.QSN_COD_PRIORITA}}</div>
+			<div class="col-sm-12">CUP_COD_SOTTOSETTORE:{{project.CUP_COD_SOTTOSETTORE}}</div>
+			<div class="col-sm-12">CUP_COD_CATEGORIA:{{project.CUP_COD_CATEGORIA}}</div>
+			<div class="col-sm-12">DATA_EFFETTIVA_FINE_PROC_ATTIV:{{project.DATA_EFFETTIVA_FINE_PROC_ATTIV}}</div>
+			<div class="col-sm-12">PO_DENOMINAZIONE_ASSE:{{project.PO_DENOMINAZIONE_ASSE}}</div>
+			<div class="col-sm-12">COD_LINEA:{{project.COD_LINEA}}</div>
+			<div class="col-sm-12">QSN_FONDO_COMUNITARIO:{{project.QSN_FONDO_COMUNITARIO}}</div>
+			<div class="col-sm-12">DPS_TIPO_PROGETTO:{{project.DPS_TIPO_PROGETTO}}</div>
+			<div class="col-sm-12">DPS_COD_TEMA_SINTETICO:{{project.DPS_COD_TEMA_SINTETICO}}</div>
+			<div class="col-sm-12">TOT_PAGAMENTI_RENDICONTABILI_UE:{{project.TOT_PAGAMENTI_RENDICONTABILI_UE}}</div>
+			<div class="col-sm-12">CUP_DESCR_CATEGORIA:{{project.CUP_DESCR_CATEGORIA}}</div>
+			<div class="col-sm-12">COD_AZIONE:{{project.COD_AZIONE}}</div>
+			<div class="col-sm-12">COD_TIPO_PROCED_ATTIVAZIONE:{{project.COD_TIPO_PROCED_ATTIVAZIONE}}</div>
+			<div class="col-sm-12">DPS_DATA_INIZIO_PREVISTA:{{project.DPS_DATA_INIZIO_PREVISTA}}</div>
+			<div class="col-sm-12">DESCR_PROCED_ATTIVAZIONE:{{project.DESCR_PROCED_ATTIVAZIONE}}</div>
+			<div class="col-sm-12">COSTO_RENDICONTABILE_UE:{{project.COSTO_RENDICONTABILE_UE}}</div>
+			<div class="col-sm-12">ECONOMIE_TOTALI_PUBBLICHE:{{project.ECONOMIE_TOTALI_PUBBLICHE}}</div>
+			<div class="col-sm-12">CUP_COD_SETTORE:{{project.CUP_COD_SETTORE}}</div>
+			<div class="col-sm-12">IMPEGNI:{{project.IMPEGNI}}</div>
+			<div class="col-sm-12">CUP_DESCR_SOTTOSETTORE:{{project.CUP_DESCR_SOTTOSETTORE}}</div>
+			<div class="col-sm-12">DATA_ADOZIONE_DELIBERA_CIPE:{{project.DATA_ADOZIONE_DELIBERA_CIPE}}</div>
+			<div class="col-sm-12">CUP_DESCR_SETTORE:{{project.CUP_DESCR_SETTORE}}</div>
+			<div class="col-sm-12">DPS_FLAG_COERENZA_DATE_PREV:{{project.DPS_FLAG_COERENZA_DATE_PREV}}</div>
+			<div class="col-sm-12">QSN_DESCRIZIONE_PRIORITA:{{project.QSN_DESCRIZIONE_PRIORITA}}</div>
+			<div class="col-sm-12">DPS_DELIBERA_CIPE:{{project.DPS_DELIBERA_CIPE}}</div>
+			<div class="col-sm-12">DPS_DATA_INIZIO_EFFETTIVA:{{project.DPS_DATA_INIZIO_EFFETTIVA}}</div>
+			<div class="col-sm-12">DATA_PUBBLICAZIONE_DELIBERA_CIPE:{{project.DATA_PUBBLICAZIONE_DELIBERA_CIPE}}</div>
+			<div class="col-sm-12">COD_GRANDE_PROGETTO:{{project.COD_GRANDE_PROGETTO}}</div>
+			<div class="col-sm-12">DPS_DESCRIZIONE_PROGRAMMA:{{project.DPS_DESCRIZIONE_PROGRAMMA}}</div>
+			<div class="col-sm-12">TOT_PAGAMENTI:{{project.TOT_PAGAMENTI}}</div>
+			<div class="col-sm-12">COD_ATECO:{{project.COD_ATECO}}</div>
+			<div class="col-sm-12">QSN_DESCR_TEMA_PRIORITARIO_UE:{{project.QSN_DESCR_TEMA_PRIORITARIO_UE}}</div>
+			<div class="col-sm-12">DPS_FLAG_CUP:{{project.DPS_FLAG_CUP}}</div>
+			<div class="col-sm-12">DPS_DATA_FINE_PREVISTA:{{project.DPS_DATA_FINE_PREVISTA}}</div>
+			<div class="col-sm-12">QSN_CODICE_OBIETTIVO_SPECIFICO:{{project.QSN_CODICE_OBIETTIVO_SPECIFICO}}</div>
+			<div class="col-sm-12">CUP_DESCR_NATU:{{project.CUP_DESCR_NATU}}RA</div>
+			<div class="col-sm-12">DESCR_TIPO_STRUMENTO:{{project.DESCR_TIPO_STRUMENTO}}</div>
+			<div class="col-sm-12">DPS_FLAG_COERENZA_DATE_EFF:{{project.DPS_FLAG_COERENZA_DATE_EFF}}</div>
+			<div class="col-sm-12">DPS_TITOLO_PROGETTO:{{project.DPS_TITOLO_PROGETTO}}</div>
+			<div class="col-sm-12">DESCR_TIPO_PROCED_ATTIVAZIONE:{{project.DESCR_TIPO_PROCED_ATTIVAZIONE}}</div>
+			<div class="col-sm-12">DATA_APPROV_STRUMENTO:{{project.DATA_APPROV_STRUMENTO}}</div>
+			<div class="col-sm-12">DATA_PREVISTA_FINE_PROC_ATTIV:{{project.DATA_PREVISTA_FINE_PROC_ATTIV}}</div>
+			<div class="col-sm-12">TOT_PAGAMENTI_FSC:{{project.TOT_PAGAMENTI_FSC}}</div>
+			<div class="col-sm-12">DATA_EFFETTIVA_BANDO_PROC_ATT:{{project.DATA_EFFETTIVA_BANDO_PROC_ATT}}IV</div>
+			<div class="col-sm-12">QSN_DESCR_OBIETTIVO_SPECIFICO:{{project.QSN_DESCR_OBIETTIVO_SPECIFICO}}</div>
+			<div class="col-sm-12">QSN_AREA_OBIETTIVO_UE:{{project.QSN_AREA_OBIETTIVO_UE}}</div>
+			<div class="col-sm-12">DESCR_AZIONE:{{project.DESCR_AZIONE}}</div>
+			<div class="col-sm-12">DATA_AGGIORNAMENTO:{{project.DATA_AGGIORNAMENTO}}</div>
+			<div class="col-sm-12">COD_PROCED_ATTIVAZIONE:{{project.COD_PROCED_ATTIVAZIONE}}</div>
+			<div class="col-sm-12">PO_OBIETTIVO_OPERATIVO:{{project.PO_OBIETTIVO_OPERATIVO}}</div>
+			<div class="col-sm-12">DPS_FLAG_PRESENZA_DATE:{{project.DPS_FLAG_PRESENZA_DATE}}</div>
+			<div class="col-sm-12">DPS_DESCR_FONTE:{{project.DPS_DESCR_FONTE}}</div>
+			<div class="col-sm-12">NOTE:{{project.NOTE}}</div>
+			<div class="col-sm-12">DATA_PREVISTA_BANDO_PROC_ATTIV:{{project.DATA_PREVISTA_BANDO_PROC_ATTIV}}</div>
+			<div class="col-sm-12">DPS_TEMA_SINTETICO:{{project.DPS_TEMA_SINTETICO}}</div>
+			<div class="col-sm-12">DPS_TIPO_PROGRAMMAZIONE:{{project.DPS_TIPO_PROGRAMMAZIONE}}</div>
+			<div class="col-sm-12">DPS_CODICE_PROGRAMMA:{{project.DPS_CODICE_PROGRAMMA}}</div>
+			
+		</div>
+		<div class="row">&nbsp;</div>
+		<div class="row">
+			{%for report in project.reports.all %} 
+			<div class="col-lg-4">
+				<div class="panel panel-{%if report.validated %}success{%else%}info{%endif%}">	
+					<div class="panel-heading">
+						<h3>Report</h3>
+					</div>
+					<div class="panel-body">
+						<div class="col-lg-12">
+							<i class="fa fa-fw fa-user"></i>{{report.author}}<br/>
+							<i class="fa fa-fw fa-calendar"></i>{{report.datetime}}
+						</div>
+					</div>
+					<div class="panel-footer">
+						<a href="/reports/{{report.id}}"><i class="fa fa-fw fa-book"></i>Visualizza</a>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<div class="row">
+			{%for file in project.uploads.all %} 
+			<div class="col-lg-4">
+				<div class="panel panel-default">	
+					<div class="panel-heading">
+						<h3>{{file.upload_type}}  {{file.name}}</h3>
+					</div>
+					<div class="panel-body">
+						<a href="/projects/{{project.id}}/files/{{file.id}}">Download the file</a>
+					</div>
+					<div class="panel-footer">
+							<i class="fa fa-fw fa-user"></i>{{file.author}} | <i class="fa fa-fw fa-calendar"></i>{{file.relative_to}}
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="container">
+			<a href="/reports/new?project={{project.id}}" class=" btn btn-small btn-flat btn-primary">Crea Report</a>
+			<a href="/projects/{{project.id}}/upload" class="and-hide btn btn-small btn-flat btn-primary">Carica File</a>
+
+	</div>
+</div>
+</div>
+
+
+{% endblock %}

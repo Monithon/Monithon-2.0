@@ -1,0 +1,20 @@
+{% extends "base.html" %} 
+{% load bootstrap_tags %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<h1>{{title|safe}}</h1>
+	</div>
+</div>
+
+<div class="container">
+	<form method="POST">
+		{% csrf_token %}
+		{{ form|as_bootstrap }}
+		<div class="form-actions">
+	      <button type="submit" class="btn btn-primary">Salva</button>
+	    </div>
+	</form>
+</div>
+{% endblock content %}

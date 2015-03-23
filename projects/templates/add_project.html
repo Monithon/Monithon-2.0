@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{%  block style %}
+
+{% endblock %}
+
+{% block jscontent %}
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="jumbotron">
+		<h1>Aggiunta Progetti</h1>
+	</div>
+</div>
+<div class="row">
+	<form method="POST">
+		<div class="form-group">
+			{%csrf_token%}
+	        <label for="url" class="col-lg-2 control-label">Url OpenCoesione</label>
+	        <div class="col-lg-10">
+	            <input type="url" name="url" class="form-control" id="url" placeholder="Url">
+	        </div>
+	        <button type="submit" class="btn btn-default"><i class="fa fa-plus fa-fw"></i> Aggiungi!</button>
+	    </div>
+	</form>
+</div>
+
+
+{% endblock %}

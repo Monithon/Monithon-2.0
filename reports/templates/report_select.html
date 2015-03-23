@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+	<p>Hai individuato un progetto su OpenCoesione? Conosci il CUP e/o il titolo?</p>
+	<a href="/projects" class="jumbotron btn btn-large btn-success col-lg-12">Trova il tuo progetto su Monithon e crea un report</a>
+</div>
+<div class="row">
+<p>Il tuo progetto non è su OpenCoesione oppure hai avuto problemi a ritrovarlo su Monithon?</p>
+	 <a href="/reports/new?project=-1" class="jumbotron btn btn-large btn-warning col-lg-12">Crea un report direttamente specificando il nome e il CUP del progetto</a>	
+</div>
+{% endblock %}
+

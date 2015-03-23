@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+	<form id="{{name}}"  role="form" method="POST" data-toggle="validator">
+		<input type="hidden" name="report" value="{{report.id}}">
+		{%csrf_token%}
+		<div class="form-group">
+			<label>Progetto *</label>
+			{% if report.project %}
+			<input type="text" class="form-control" disabled value="{{report.project.description}}">
+			<input type="hidden" value="{{report.project.id}}" id="project" name="project" data-cup="{{report.project.cup}}">
+			{% else %}
+			<input type="text" class="form-control" id="project_name">
+			{% endif %}
+		</div>
+		<div class="form-group">
+			<label>Team *</label>
+			<select id="team" name="team" class="form-control">
+				<option value="">-</option>
+			{% for team in request.user.monitor_profile.all.0.teams.all %}
+				<option value="{{team.id}}">{{team.name}}</option>
+			{% endfor %}
+			</select>
+		</div>
+		<div class="form-group">
+			<label>Author *</label>
+			<input type="text" id="author" name="author" value="{{report.author_text}}" class="form-control">
+		</div>
+		<div class="form-group" style="height:260px;">
+			<label>Posizione *</label>
+			<div id="main_map"  clasS="container" style="height:360px; display:block; position:relative;"></div>
+			<input type="hidden" id="main_map_mod">
+		</div>
+		
+		<div id="main_form">
+		</div>
+
+		<div class="input-group">
+			<select id="add_form" class="form-control">
+
+			</select>
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="button" id="do_add_form"><i class="fa fa-fw fa-plus"></i></button>
+			</span>
+		</div><!-- /input-group -->
+		<div class="form-group">
+			<a href="#" onclick='window.open("/projects/{{project.id}}/upload?from=report", "MsgWindow", "width=700, height=550");' type="button" id="author" name="author" value="{{user.username}}" class="form-control btn btn-warning ">Carica file</a>
+		</div>
+		<br />
+		<button class="btn btn-primary form-control submitter" id="save_draft">Salva come Bozza</button>
+		<button class="btn btn-primary form-control submitter" id="submits">Invia</button>
+	</form>
+</div>
+{% endblock %}
+
+{% block jscontent%}
+var forms = {{forms|safe}};
+{%if report.position%}
+var report = {{report.position.json|safe}} ;
+{%endif%}
+var da = null;
+
+function to_geojson(leaflet_object) {
+    var temp_coords = [];
+    $.each(leaflet_object.getLatLngs(), function(index,value) {
+        temp_coords.push([value.lng, value.lat]);
+    });
+    json_hash = {
+        "type": "Feature",
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [temp_coords]
+        },
+    };
+
+    return JSON.stringify(json_hash);
+}
+
+function populate(area, js){
+	for (var i in js){
+		var x = js[i];
+		if (x.type == "radio" || x.type == "checkbox"){
+			$("[name='"+x.name+"'][value='"+x.value+"']").attr("checked","true");
+		}
+		else if(x.multi){
+			var to_clone = $($("[name='"+x.name+"']")[0]).closest(".input-group");
+			var c = to_clone.clone(true);
+			c.find("input").val(x.value);
+			to_clone.parent().find(".entry").after().append(c);
+		}
+		else
+			$("[name="+x.name+"]").val(x.value);
+
+	}
+
+		if (report){
+			L.marker([report.coordinates[1], report.coordinates[0]]).addTo(da);
+		}
+}
+
+$(function(){
+	
+	$.getJSON("/forms/list", function(data){
+		if(data.length > 0)
+			for (var i in data)
+				$('#add_form').append("<option value='"+data[i]+"'>"+data[i]+"</option>");
+		else 
+			$('#add_form').closest(".input-group").hide();
+	});
+
+	function get_form(f_name){
+		$.get('/forms/show/'+f_name, function(data){
+			$("#main_form").append($(data));
+			$.material.init();
+			populate($("#main_form"), {{report.to_json|safe}});
+
+			$(".form-group").each(function(i,e){
+				var f = $(e).data("fetch");
+				if(f == "cup")
+					if ($("#project").length > 0)
+						$(e).find("input").val($("#project").data("cup")).attr("disabled","y");
+			});
+		});
+	}
+
+	for (var form in forms){
+		get_form(forms[form]);
+	}
+
+	$("#do_add_form").click(function(){
+		var f_name = $("#add_form").val();
+		get_form(f_name);
+	});
+
+	$(window.document).on("click",".clone-self", function(){
+		var to_clone = $(this).closest(".input-group");
+		var c = to_clone.clone(true);
+		to_clone.parent().find(".entry").after().append(c);
+
+	});
+
+
+
+
+	$("#submits").click(function(e){
+
+		var mode = $(this).attr("id");
+		var rep = $("[name=report]").val();
+			$('form').validator("validate");
+			if ($("form")[0].checkValidity()){
+				var ret = [];
+				$('.form-area').each(function(i,e){
+					var origin = $(e).data("origin");
+					var area = {"origin":origin, "data":[]};
+					$(e).find("input, textarea").each(function(k,r){
+						if($(r).attr("name")!==undefined &&  $(r).attr("name").indexOf("leaflet")<0)
+							if($(r).attr("type") == "checkbox" || $(r).attr("type") == "radio")
+								if($(r).is(":checked"))
+									area["data"].push({"name":$(r).attr("name"), "value":$(r).val()});
+								else 
+								;
+							else
+								area["data"].push({"name":$(r).attr("name"), "value":$(r).val()});
+					});
+					ret.push(area); 	
+				});
+				console.log(ret);
+				var topush = {"report":rep, "data":JSON.stringify({"report":ret}), "mode":mode, "team":$("#team").val(), "project":$("#project").val(), "author":$("#author").val(), "pos":$("#main_map_mod").val()};
+				$.ajax({
+					"url":"/reports/push",
+					"method":"POST",
+					"data":topush,
+					"success":function(data){
+						data = JSON.parse(data);
+						if (data.message == "result"){
+							if (data.type == "OK"){
+								alert("Grazie per aver inviato un report! A breve verrà pubblicato.");
+								window.location = "/reports/"+data.id
+							}
+						} else if (data.message = "error"){
+							alert(data.error);
+						}
+					}
+				});
+			}
+		e.preventDefault();
+		return false;
+	});
+
+	//$("#project_name").change(function(){
+	//	if($(this).val().length >= 3){
+	//		$.getJSON("/projects/search?q="+$(this).val(), function(data){
+	//			alert(data);
+	//		});
+	//	}
+	//});
+
+
+
+
+
+		$('#main_map').parent().height(333);
+		var mmap = L.map('main_map').setView([42.715, 15.271], 6);
+		var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+	        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+	    }).addTo(mmap);
+	    //var imagery = L.esri.basemapLayer("Imagery").addTo(mmap);
+
+		var drawnItems = L.featureGroup().addTo(mmap);
+		da = drawnItems;
+		mmap.addLayer(drawnItems);
+
+
+		var drawControl = new L.Control.Draw({
+		    edit: {
+		        featureGroup: drawnItems
+		    },
+		    draw:{
+			    polyline:false,
+			    polygon:false,
+			    rectangle:false,
+			    circle:false
+		    }
+		});
+
+
+	  mmap.on('draw:created', function(e) {
+	      drawnItems.addLayer(e.layer);
+	      console.log(drawnItems);
+	      val = drawnItems.toGeoJSON();
+
+	      $("#main_map_mod").val(JSON.stringify(val));
+	  });
+
+
+	    L.control.layers({"OSM":osmLayer/*, "Imagery":imagery*/},{"markers":drawnItems}).addTo(mmap);
+		mmap.addControl(drawControl);
+		L.control.fullscreen().addTo(mmap);
+
+
+	$.material.init();
+});
+{% endblock %}
